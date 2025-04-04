@@ -8,11 +8,11 @@
 </head>
 <body>
 
-  <h1>《初恋这件小事》</h1>
+  <h1>🎬 初恋那件小事</h1>
 
   <div class="video-container">
     <video id="videoPlayer" controls>
-      <source id="videoSource" src="https://alist.bigbabyer.eu.org/d/115/%E8%A7%86%E9%A2%91/%E6%B3%B0%E5%9B%BD%E7%94%B5%E5%BD%B1/%E5%88%9D%E6%81%8B%E8%BF%99%E4%BB%B6%E5%B0%8F%E4%BA%8B.mkv?sign=wFk73qbEZNa2B8xlx1eRObDDITUcRHW5IfVaR65C8x4=:0" type="video/mp4" />
+      <source id="videoSource" src="" type="video/mp4" />
       您的浏览器不支持 HTML5 视频播放。
     </video>
     <div class="controls">
@@ -21,6 +21,43 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const videoPlayer = document.getElementById("videoPlayer");
+    const videoSource = document.getElementById("videoSource");
+
+    // 从本地 JSON 加载视频地址
+    fetch("videos.json")
+      .then(res => res.json())
+      .then(data => {
+        videoSource.src = data.video.src;
+        videoPlayer.load();
+      })
+      .catch(err => {
+        console.error("视频加载失败：", err);
+      });
+
+    // 全屏播放
+    function toggleFullScreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        videoPlayer.requestFullscreen();
+      }
+    }
+
+    // 小窗播放（画中画）
+    async function togglePip() {
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          await videoPlayer.requestPictureInPicture();
+        }
+      } catch (error) {
+        console.error("小窗播放失败：", error);
+      }
+    }
+  </script>
+
 </body>
 </html>
